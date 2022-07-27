@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "2b5b764a-6a86-4ae8-a718-aefff294df09",
+		"name": "curso python flask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10157659"
+	},
+	"item": [
+		{
+			"name": "hoteis",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "hoteis/{hotel_id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/hoteis/castro",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"hoteis",
+						"castro"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hoteis/{hotel_id}",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Dienifer Hotel\",\r\n    \"estrelas\": 4.7,\r\n    \"diaria\": 500,\r\n    \"cidade\": \"Tocantins\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/hoteis/dienifer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"hoteis",
+						"dienifer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hoteis/{hotel_id}",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/hoteis",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"hoteis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hoteis/{hotel_id}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/hoteis",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"hoteis"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
