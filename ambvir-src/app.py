@@ -12,9 +12,8 @@ api = Api(app)
 
 @app.before_first_request
 def cria_banco():
-    #from sql_alchemy import banco
     """Create database"""
-    
+
     banco.create_all()
 
 
@@ -25,4 +24,3 @@ banco.init_app(app)
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
