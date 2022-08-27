@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.241.1/containers/python-3
 {
-	"name": "Python 3",
+	"name": "Python 3 - Flask",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
@@ -38,7 +38,17 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-python.python",
-				"ms-python.vscode-pylance"
+				"ms-python.vscode-pylance",
+				"SonarSource.sonarlint-vscode",
+				"KevinRose.vsc-python-indent",
+				"aaron-bond.better-comments",
+				"LittleFoxTeam.vscode-python-test-adapter",
+				"dongli.python-preview",
+				"njqdev.vscode-python-typehint",
+				"almenon.arepl",
+				"njpwerner.autodocstring",
+				"cstrap.flask-snippets",
+				"qwtel.sqlite-viewer"
 			]
 		}
 	},
