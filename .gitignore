@@ -1,3 +1,5 @@
 .venv/
 .venv-ambvir/
-*/__pycache__/
+**__pycache__**
+ambvir-scr/**/__pycache__/**
+*.pyc
