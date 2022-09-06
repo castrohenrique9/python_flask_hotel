@@ -30,6 +30,25 @@ def normalize_path_params(cidade=None,
         }
 
 
+def normalize_path_params(cidade=None,
+                          estrelas_min=0,
+                          estrelas_max=5,
+                          diaria_min=0,
+                          diaria_max=10000,
+                          limit=50,
+                          offset=0, **dados):
+    result = {
+            'cidade': cidade,
+            'estrelas_min': estrelas_min,
+            'estrelas_max': estrelas_max,
+            'diaria_min': diaria_min,
+            'diaria_max': diaria_max,
+            'limit': limit,
+            'offset': offset}
+    if cidade:
+        result['cidade'] = cidade
+    return result
+
 path_params = reqparse.RequestParser()
 path_params.add_argument('cidade', type=str)
 path_params.add_argument('estrelas_min', type=float)
@@ -38,6 +57,7 @@ path_params.add_argument('diaria_min', type=float)
 path_params.add_argument('diaria_max', type=float)
 path_params.add_argument('limit', type=float)
 path_params.add_argument('offset', type=float)
+
 
 class Hoteis(Resource):
     def get(self):
