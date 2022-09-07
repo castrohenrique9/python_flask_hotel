@@ -60,7 +60,27 @@ path_params.add_argument('offset', type=float)
 
 
 class Hoteis(Resource):
+    """Hoteis resource"""
+    
     def get(self):
+        connection = sqlite3.connect('banco.db')
+        cursor = connection.cursor()
+        
+        dados = path_params.parse_args
+        dados_validos = {chave: dados[chave] for chave in dados if dados[chave] is not None}
+        parametros = normalize_path_params(**dados_validos)
+        
+        query = query = "SELECT * FROM hoteis \
+                WHERE (estrelas BETWEEN ? AND ?) \
+                AND diaria BETWEEN ? AND ?"
+        if parametros.get('cidade'):
+            query += " AND cidade = ?"           
+        
+        query += " LIMIT ? OFFSET ?"
+            
+        tupla = tuple([parametros[chave] for chave in parametros])
+        result = cursor.execute(query, tupla)
+        
         return {"hoteis": [hotel.json() for hotel in HotelModel.query.all()]}
 
 
