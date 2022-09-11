@@ -23,12 +23,12 @@ def normalize_path_params(cidade=None,
 
 path_params = reqparse.RequestParser(bundle_errors=True)
 path_params.add_argument('cidade', type=str, help='erro1')
-path_params.add_argument('estrelas_min', type=float, help='erro1')
-path_params.add_argument('estrelas_max', type=float, help='erro1')
-path_params.add_argument('diaria_min', type=float, help='erro1')
-path_params.add_argument('diaria_max', type=float, help='erro1')
-path_params.add_argument('limit', type=float, help='erro1')
-path_params.add_argument('offset', type=float, help='erro1')
+path_params.add_argument('estrelas_min', type=float, help='erro2')
+path_params.add_argument('estrelas_max', type=float, help='erro3')
+path_params.add_argument('diaria_min', type=float, help='erro4')
+path_params.add_argument('diaria_max', type=float, help='erro5')
+path_params.add_argument('limit', type=float, help='erro6')
+path_params.add_argument('offset', type=float, help='erro7')
 
 
 class Hoteis(Resource):
@@ -41,19 +41,21 @@ class Hoteis(Resource):
         dados_validos = {chave: dados[chave] for chave in dados if dados[chave] is not None}
         parametros = normalize_path_params(**dados_validos)
         
-        query = "SELECT * FROM hoteis \
-                WHERE (estrelas BETWEEN :estrelas_min AND :estrelas_max) \
-                AND diaria BETWEEN :diaria_min AND :diaria_max"
-        if parametros.get('cidade'):
-            query += " AND cidade = :cidade"
+        #query = "SELECT * FROM hoteis \
+        #        WHERE (estrelas BETWEEN :estrelas_min AND :estrelas_max) \
+        #        AND (diaria BETWEEN :diaria_min AND :diaria_max)"
+        #query += " AND cidade = :cidade" if parametros.get('cidade') else ""
+        #query += " LIMIT :limit OFFSET :offset"
+        
+        query = "SELECT * FROM hoteis"
+        query += " WHERE (estrelas BETWEEN :estrelas_min AND :estrelas_max)"
+        query += " AND cidade = :cidade" if parametros.get('cidade') else ""
         query += " LIMIT :limit OFFSET :offset"
         
-        #query = "SELECT * FROM hoteis WHERE cidade = :cidade"
-        
         connection = sqlite3.connect('ambvir-src/banco.sqlite')
+        connection.set_trace_callback(print)
         cursor = connection.cursor()
-        tupla = tuple([parametros[chave] for chave in parametros])
-        result = cursor.execute(query, tupla)
+        result = cursor.execute(query, parametros)
         
         hotels = []
         for i in result:
@@ -64,7 +66,6 @@ class Hoteis(Resource):
                 'daily': i[3],
                 'city': i[4]
             })
-        
         return {"hotels": hotels}
 
 
