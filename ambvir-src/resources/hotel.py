@@ -41,14 +41,9 @@ class Hoteis(Resource):
         dados_validos = {chave: dados[chave] for chave in dados if dados[chave] is not None}
         parametros = normalize_path_params(**dados_validos)
         
-        #query = "SELECT * FROM hoteis \
-        #        WHERE (estrelas BETWEEN :estrelas_min AND :estrelas_max) \
-        #        AND (diaria BETWEEN :diaria_min AND :diaria_max)"
-        #query += " AND cidade = :cidade" if parametros.get('cidade') else ""
-        #query += " LIMIT :limit OFFSET :offset"
-        
         query = "SELECT * FROM hoteis"
         query += " WHERE (estrelas BETWEEN :estrelas_min AND :estrelas_max)"
+        query += " AND (diaria BETWEEN :diaria_min AND :diaria_max)"
         query += " AND cidade = :cidade" if parametros.get('cidade') else ""
         query += " LIMIT :limit OFFSET :offset"
         
