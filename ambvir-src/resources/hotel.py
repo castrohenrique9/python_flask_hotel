@@ -11,7 +11,6 @@ def normalize_path_params(cidade=None,
                           offset=0, **dados):
     """Normalize json data"""
     result = {
-            'cidade': cidade,
             'estrelas_min': estrelas_min,
             'estrelas_max': estrelas_max,
             'diaria_min': diaria_min,
@@ -22,14 +21,14 @@ def normalize_path_params(cidade=None,
         result['cidade'] = cidade
     return result
 
-path_params = reqparse.RequestParser()
-path_params.add_argument('cidade', type=str)
-path_params.add_argument('estrelas_min', type=float)
-path_params.add_argument('estrelas_max', type=float)
-path_params.add_argument('diaria_min', type=float)
-path_params.add_argument('diaria_max', type=float)
-path_params.add_argument('limit', type=float)
-path_params.add_argument('offset', type=float)
+path_params = reqparse.RequestParser(bundle_errors=True)
+path_params.add_argument('cidade', type=str, help='erro1')
+path_params.add_argument('estrelas_min', type=float, help='erro1')
+path_params.add_argument('estrelas_max', type=float, help='erro1')
+path_params.add_argument('diaria_min', type=float, help='erro1')
+path_params.add_argument('diaria_max', type=float, help='erro1')
+path_params.add_argument('limit', type=float, help='erro1')
+path_params.add_argument('offset', type=float, help='erro1')
 
 
 class Hoteis(Resource):
@@ -42,16 +41,19 @@ class Hoteis(Resource):
         dados_validos = {chave: dados[chave] for chave in dados if dados[chave] is not None}
         parametros = normalize_path_params(**dados_validos)
         
-        query = query = "SELECT * FROM hoteis \
-                WHERE (estrelas BETWEEN ? AND ?) \
-                AND diaria BETWEEN ? AND ?"
+        query = "SELECT * FROM hoteis \
+                WHERE (estrelas BETWEEN :estrelas_min AND :estrelas_max) \
+                AND diaria BETWEEN :diaria_min AND :diaria_max"
         if parametros.get('cidade'):
-            query += " AND cidade = ?"
-        query += " LIMIT ? OFFSET ?"
+            query += " AND cidade = :cidade"
+        query += " LIMIT :limit OFFSET :offset"
+        
+        #query = "SELECT * FROM hoteis WHERE cidade = :cidade"
         
         connection = sqlite3.connect('ambvir-src/banco.sqlite')
         cursor = connection.cursor()
-        result = cursor.execute(query, tuple([parametros[chave] for chave in parametros]))
+        tupla = tuple([parametros[chave] for chave in parametros])
+        result = cursor.execute(query, tupla)
         
         hotels = []
         for i in result:
@@ -60,13 +62,14 @@ class Hoteis(Resource):
                 'name': i[1],
                 'stars': i[2],
                 'daily': i[3],
-                'city': i[4],
+                'city': i[4]
             })
         
         return {"hotels": hotels}
 
 
 class Hotel(Resource):
+    """A hotel resource"""
 
     atributos = reqparse.RequestParser()
     atributos.add_argument(
