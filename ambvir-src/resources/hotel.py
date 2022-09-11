@@ -1,34 +1,6 @@
+import sqlite3
 from flask_restful import Resource, reqparse
 from models.hotel import HotelModel
-import sqlite3
-
-def normalize_path_params(cidade=None,
-                          estrelas_min = 0,
-                          estrelas_max = 5,
-                          diaria_min = 0,
-                          diaria_max = 10000,
-                          limit = 50,
-                          offset = 0,
-                          **dados):
-    if cidade:
-        return {
-            'estrelas_min': estrelas_min,
-            'estrelas_max': estrelas_max,
-            'diaria_min': diaria_min,
-            'diaria_max': diaria_max,
-            'cidade': cidade,
-            'limit': limit,
-            'offset': offset
-        }
-    return {
-            'estrelas_min': estrelas_min,
-            'estrelas_max': estrelas_max,
-            'diaria_min': diaria_min,
-            'diaria_max': diaria_max,
-            'limit': limit,
-            'offset': offset
-        }
-
 
 def normalize_path_params(cidade=None,
                           estrelas_min=0,
@@ -37,6 +9,7 @@ def normalize_path_params(cidade=None,
                           diaria_max=10000,
                           limit=50,
                           offset=0, **dados):
+    """Normalize json data"""
     result = {
             'cidade': cidade,
             'estrelas_min': estrelas_min,
@@ -63,10 +36,9 @@ class Hoteis(Resource):
     """Hoteis resource"""
     
     def get(self):
-        connection = sqlite3.connect('banco.db')
-        cursor = connection.cursor()
+        """Return hotels data"""
         
-        dados = path_params.parse_args
+        dados = path_params.parse_args()
         dados_validos = {chave: dados[chave] for chave in dados if dados[chave] is not None}
         parametros = normalize_path_params(**dados_validos)
         
@@ -74,14 +46,24 @@ class Hoteis(Resource):
                 WHERE (estrelas BETWEEN ? AND ?) \
                 AND diaria BETWEEN ? AND ?"
         if parametros.get('cidade'):
-            query += " AND cidade = ?"           
-        
+            query += " AND cidade = ?"
         query += " LIMIT ? OFFSET ?"
-            
-        tupla = tuple([parametros[chave] for chave in parametros])
-        result = cursor.execute(query, tupla)
         
-        return {"hoteis": [hotel.json() for hotel in HotelModel.query.all()]}
+        connection = sqlite3.connect('ambvir-src/banco.sqlite')
+        cursor = connection.cursor()
+        result = cursor.execute(query, tuple([parametros[chave] for chave in parametros]))
+        
+        hotels = []
+        for i in result:
+            hotels.append({
+                'hotel_id': i[0],
+                'name': i[1],
+                'stars': i[2],
+                'daily': i[3],
+                'city': i[4],
+            })
+        
+        return {"hotels": hotels}
 
 
 class Hotel(Resource):
