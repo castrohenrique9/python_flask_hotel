@@ -1,3 +1,4 @@
+"""Hotel models"""
 from sql_alchemy import banco
 
 
@@ -20,6 +21,7 @@ class HotelModel(banco.Model):
         self.cidade = cidade
 
     def json(self):
+        """Return data in JSON format"""
         return {
             "hotel_id": self.hotel_id,
             "nome": self.nome,
