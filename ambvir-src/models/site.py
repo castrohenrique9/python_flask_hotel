@@ -9,6 +9,7 @@ class SiteModel(banco.Model):
     # mapeamento para o SQLAlquemy
     site_id = banco.Column(banco.Integer, primary_key=True)
     url = banco.Column(banco.String(80))
+    hoteis = banco.relationship('HotelModel')
 
     def __init__(self, site_id, url):
         self.site_id = site_id
