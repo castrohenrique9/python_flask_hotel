@@ -20,6 +20,7 @@ class SiteModel(banco.Model):
         return {
             "site_id": self.site_id,
             "url": self.url,
+            "hoteis": [hotel.json() for hotel in self.hoteis]
         }
 
     @classmethod
