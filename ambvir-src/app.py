@@ -3,6 +3,7 @@
 from flask import Flask
 from flask_restful import Api
 from resources.hotel import Hoteis, Hotel
+from resources.site import Sites, Site
 from sql_alchemy import banco
 
 app = Flask(__name__)
@@ -19,6 +20,8 @@ def cria_banco():
 
 api.add_resource(Hoteis, '/hoteis')
 api.add_resource(Hotel, '/hoteis/<string:hotel_id>')
+api.add_resource(Sites, '/sites')
+api.add_resource(Site, '/sites/<string:url>')
 
 banco.init_app(app)
 
